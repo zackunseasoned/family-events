@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thanksgiving at Vinny &amp; Zack's</title>
+<meta name="description" content="Thanksgiving dinner at Vinny & Zack's · Thursday, November 26, 2026 · 3 PM until whenever (Pacific). RSVP by Friday, November 20.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Commissioner:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a turkey-and-pig intro on a stage, then one lantern-lit evening column with a sticky section menu. Single deliberate dark look. */
+:root{
+  --dusk:#1c1416;        /* page ground: late-November evening */
+  --ember:#2a1d1f;       /* raised surfaces */
+  --line:#4a3534;        /* hairlines */
+  --candle:#f3e3c7;      /* main text */
+  --muted:#c2ab92;       /* secondary text */
+  --squash:#e8963a;      /* accent: roasted squash */
+  --cranberry:#c8434f;   /* second accent */
+  --sage:#93a87c;        /* confirmations */
+  --f-display:"Gloock", "Georgia", serif;
+  --f-body:"Commissioner", system-ui, -apple-system, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:76px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+body{background:var(--dusk);color:var(--candle);font:16px/1.6 var(--f-body);margin:0;overflow-x:hidden}
+#leaves{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+/* ---------- Intro stage ---------- */
+.stage{position:fixed;inset:0;z-index:20;overflow:hidden;cursor:pointer;
+  background:radial-gradient(60% 45% at 50% 72%,rgba(232,150,58,.16),transparent 70%);transition:opacity .7s ease}
+.stage.gone{opacity:0;pointer-events:none}
+.stage[hidden]{display:none}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:max(10vh,44px)}
+.ground{position:absolute;left:50%;bottom:calc(max(10vh,44px) - 4px);width:min(560px,96vw);height:22px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.5),transparent)}
+.skip{position:absolute;top:max(16px,env(safe-area-inset-top,0px));right:16px;z-index:3;font:500 13px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(42,29,31,.85);border:1px solid var(--line);border-radius:999px;padding:10px 14px;cursor:pointer}
+.skip:hover{color:var(--candle);border-color:var(--squash)}
+.skip:focus-visible{outline:2px solid var(--squash);outline-offset:2px}
+.tap-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;font:400 12px/1 var(--f-mono);color:var(--muted);opacity:.7}
+
+.cast{display:flex;justify-content:center;align-items:flex-end;gap:min(28px,3vw);margin-bottom:calc(-1 * min(44px,7vw,6vh));position:relative;z-index:1}
+.who{position:relative;width:min(190px,34vw,28vh);transform:translateX(var(--from));}
+#turkey{--from:-110vw;--to:-130vw;--lean:6deg}
+#pig{--from:110vw;--to:130vw;--lean:-6deg}
+.who.in{transform:none;transition:transform 2s cubic-bezier(.25,.6,.35,1)}
+.who.run{transform:translateX(var(--to)) rotate(var(--lean));transition:transform .8s cubic-bezier(.55,0,.9,.4)}
+.who svg{display:block;width:100%;height:auto;overflow:visible}
+
+.bubble{position:absolute;bottom:94%;left:50%;transform:translate(-50%,8px) scale(.85);opacity:0;transform-origin:50% 100%;z-index:2;
+  width:max-content;max-width:min(46vw,250px);background:var(--candle);color:var(--dusk);font:600 clamp(14px,3.9vw,18px)/1.25 var(--f-body);
+  padding:10px 14px;border-radius:16px;text-align:center;transition:opacity .2s, transform .25s cubic-bezier(.3,1.6,.5,1)}
+.bubble::after{content:"";position:absolute;top:100%;left:50%;margin-left:-8px;border:8px solid transparent;border-top-color:var(--candle)}
+.bubble.show{opacity:1;transform:translate(-50%,0) scale(1)}
+.bubble em{font-style:normal;color:var(--cranberry)}
+
+/* shared character parts */
+.body,.leg,.hd,.eye,.pupil,.tail,.hat,.ear,.curl,.snood,.sweat{transform-box:fill-box}
+.leg{transform-origin:50% 0}
+.walking .leg-l{animation:step .32s ease-in-out infinite alternate}
+.walking .leg-r{animation:step .32s ease-in-out infinite alternate-reverse}
+.walking .body{animation:bob .32s ease-in-out infinite alternate}
+.run .leg-l{animation:step .1s linear infinite alternate}
+.run .leg-r{animation:step .1s linear infinite alternate-reverse}
+@keyframes step{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+@keyframes bob{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+.hd{transform-origin:50% 100%;transition:transform .4s cubic-bezier(.3,1.4,.5,1)}
+#turkey.read .hd{transform:rotate(12deg) translateY(4px)}
+#pig.read .hd{transform:rotate(-12deg) translateY(4px)}
+.eye{transform-origin:50% 50%;transition:transform .2s}
+.pupil{transform-origin:50% 50%;transition:transform .15s}
+.panic .eye{transform:scale(1.25)}
+.panic .pupil{transform:scale(.45)}
+.blink .eye{animation:blink .18s ease-in-out 1}
+@keyframes blink{50%{transform:scaleY(.1)}}
+.sweat,.shock{opacity:0;transition:opacity .2s}
+.panic .sweat,.panic .shock{opacity:1}
+.panic .sweat{animation:drip 1s ease-in infinite}
+@keyframes drip{from{transform:translateY(0)}to{transform:translateY(10px)}}
+.panic .body{animation:shake .09s linear 10}
+@keyframes shake{0%,100%{transform:translateX(0)}50%{transform:translateX(-4px)}}
+.smug .pupil{transform:translateY(-1.5px) scaleY(.55)}
+
+/* turkey specifics */
+.snood{transform-origin:30% 0;animation:wobble 1.4s ease-in-out infinite}
+@keyframes wobble{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(10deg)}}
+.tail{transform-origin:50% 90%;transition:transform .25s cubic-bezier(.3,1.8,.5,1)}
+.panic .tail{transform:scale(1.14)}
+.hat{transition:transform .25s cubic-bezier(.3,1.8,.5,1)}
+.panic .hat{transform:translateY(-14px) rotate(-8deg)}
+
+/* pig specifics */
+.ear{transition:transform .25s cubic-bezier(.3,1.8,.5,1)}
+.ear-l{transform-origin:80% 100%}.ear-r{transform-origin:20% 100%}
+.panic .ear-l{transform:rotate(-24deg) translateY(-6px)}
+.panic .ear-r{transform:rotate(24deg) translateY(-6px)}
+.curl{transform-origin:0% 50%;animation:wag .5s ease-in-out infinite alternate}
+.panic .curl{animation-duration:.08s}
+@keyframes wag{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.grin{opacity:0;transition:opacity .15s}.smile{transition:opacity .15s}
+.panic .grin{opacity:1}.panic .smile{opacity:0}
+
+/* envelope */
+.env{position:relative;width:min(180px,40vw,26vh);aspect-ratio:3/2;perspective:700px;z-index:2;transition:transform .6s cubic-bezier(.3,1.4,.5,1)}
+.env-back{position:absolute;inset:0;background:#c9ad82;border-radius:5px;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.env-letter{position:absolute;left:7%;right:7%;top:6%;height:88%;background:var(--candle);color:var(--dusk);border-radius:3px;display:flex;align-items:center;justify-content:center;text-align:center;
+  font:400 clamp(13px,3.6vw,17px)/1.1 var(--f-display);padding:6px;transition:transform .7s cubic-bezier(.3,1.2,.5,1) .35s}
+.env-front{position:absolute;inset:0;background:#e3c99f;border-radius:5px;clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:58%;background:#d6bb90;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:50% 0;transition:transform .5s ease-in;z-index:3;border-radius:5px 5px 0 0}
+.seal{position:absolute;left:50%;top:58%;width:24%;aspect-ratio:1;transform:translate(-50%,-62%);border-radius:50%;background:var(--cranberry);z-index:4;
+  display:flex;align-items:center;justify-content:center;font:400 clamp(10px,2.8vw,13px)/1 var(--f-display);color:var(--candle);transition:opacity .2s}
+.open .seal{opacity:0}
+.open .env-flap{transform:rotateX(180deg);z-index:0}
+.open .env-letter{transform:translateY(-62%)}
+.open .env{transform:scale(1.18)}
+
+/* dust + loose feathers */
+.fx{position:absolute;left:50%;bottom:max(10vh,44px);width:0;height:0;z-index:2}
+.puff{position:absolute;bottom:0;width:36px;height:36px;border-radius:50%;background:rgba(194,171,146,.35);opacity:0}
+.puff:nth-child(1){left:-150px}.puff:nth-child(2){left:-110px}.puff:nth-child(3){left:80px}.puff:nth-child(4){left:120px}
+.running .puff{animation:puff .8s ease-out forwards}
+.running .puff:nth-child(2n){animation-delay:.1s}
+@keyframes puff{0%{opacity:.9;transform:scale(.4)}100%{opacity:0;transform:scale(2.2) translateY(-12px)}}
+.feather{position:absolute;bottom:150px;width:10px;height:28px;border-radius:50%;opacity:0}
+.running .feather{animation:float 2.2s ease-in forwards}
+.feather:nth-child(5){background:var(--squash);left:-140px}
+.feather:nth-child(6){background:var(--cranberry);left:-100px;animation-delay:.2s!important}
+.feather:nth-child(7){background:#d9a441;left:-60px;animation-delay:.35s!important}
+@keyframes float{0%{opacity:1;transform:translate(0,-50px) rotate(0)}50%{transform:translate(18px,10px) rotate(40deg)}100%{opacity:0;transform:translate(-10px,110px) rotate(-30deg)}}
+
+/* ---------- Invitation ---------- */
+body:not(.ready) .wrap{visibility:hidden}
+.wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px;display:flex;flex-direction:column;gap:56px}
+
+.hero{display:flex;flex-direction:column;gap:18px;padding-top:24px}
+.eyebrow{font:500 13px/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:var(--squash)}
+h1{font:400 clamp(44px,10vw,88px)/.98 var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1 .amp{color:var(--squash);font-style:italic}
+.lede{font-size:19px;color:var(--muted);max-width:34ch;margin:0}
+
+.rise{opacity:0}
+.ready .rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
+.ready .rise:nth-child(2){animation-delay:.12s}.ready .rise:nth-child(3){animation-delay:.24s}
+@keyframes rise{from{transform:translateY(14px);opacity:.15}to{transform:none;opacity:1}}
+
+/* sticky section menu */
+.tabs{position:sticky;top:0;z-index:5;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px));
+  background:rgba(28,20,22,.9);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+  display:flex;overflow-x:auto;scrollbar-width:none;margin-block:-28px}
+.tabs::-webkit-scrollbar{display:none}
+.tabs a{flex:none;font:500 13px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:10px 12px;border-radius:4px;white-space:nowrap;position:relative}
+.tabs a+a::before{content:"";position:absolute;left:0;top:25%;bottom:25%;width:1px;background:var(--line)}
+.tabs a:hover{color:var(--candle)}
+.tabs a[aria-current="true"]{color:var(--squash)}
+.tabs a[aria-current="true"]::after{content:"";position:absolute;left:12px;right:12px;bottom:2px;height:2px;background:var(--squash);border-radius:2px}
+.tabs a:focus-visible{outline:2px solid var(--squash);outline-offset:-2px}
+
+section{display:flex;flex-direction:column;gap:18px}
+h2{font:400 34px/1.1 var(--f-display);margin:0;text-wrap:balance}
+h2 small{display:block;font:500 12px/1 var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--squash);margin-bottom:10px}
+p{margin:0;max-width:62ch}
+.card{display:flex;flex-direction:column;gap:16px;background:var(--ember);border:1px solid var(--line);border-radius:6px;padding:20px}
+.hint{font:400 13px/1.5 var(--f-mono);color:var(--muted)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 15px/1 var(--f-body);background:var(--squash);color:var(--dusk);border:1px solid var(--squash);border-radius:4px;padding:13px 20px;text-decoration:none;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--candle);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--squash);filter:none}
+.btn:focus-visible{outline:2px solid var(--squash);outline-offset:2px}
+.inline{color:var(--squash);text-underline-offset:3px}
+.alt{font:400 13px/1.6 var(--f-mono);color:var(--muted)}
+.addr{color:var(--candle);user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
+.copy{font:500 12px/1 var(--f-mono);color:var(--squash);background:none;border:1px solid var(--line);border-radius:999px;padding:5px 10px;margin-left:4px;cursor:pointer}
+.copy:hover{border-color:var(--squash)}
+.copy:focus-visible{outline:2px solid var(--squash);outline-offset:2px}
+
+/* Date / time */
+.when{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.cal{width:104px;border-radius:6px;overflow:hidden;border:1px solid var(--line);text-align:center;background:var(--ember)}
+.cal span{display:block;background:var(--cranberry);font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:7px 0}
+.cal b{display:block;font:400 54px/1 var(--f-display);padding:10px 0 4px}
+.cal i{display:block;font:normal 400 12px/1 var(--f-mono);color:var(--muted);padding-bottom:10px;text-transform:uppercase;letter-spacing:.1em}
+.when-text b{display:block;font:400 30px/1.1 var(--f-display)}
+.when-text span{color:var(--muted)}
+.clock{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.clock div{background:var(--ember);padding:14px 10px;text-align:center}
+.clock b{display:block;font:400 34px/1 var(--f-display);font-variant-numeric:tabular-nums;color:var(--squash)}
+.clock span{font:400 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.deadline{font:400 14px/1.4 var(--f-mono);color:var(--muted)}
+.deadline strong{color:var(--cranberry);font-weight:500}
+
+.where b{display:block;font:400 30px/1.1 var(--f-display)}
+
+/* On the table */
+.mains{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.main{border-top:2px solid var(--squash);padding-top:14px;display:flex;flex-direction:column;gap:4px}
+.main b{font:400 28px/1.1 var(--f-display)}
+.main span{color:var(--muted);font-size:14px}
+.cameo{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
+.cameo .mini{width:78px;flex:none}
+.cameo .mini svg{display:block;width:100%;height:auto;overflow:visible}
+.cameo .mini .pupil{transition:none}
+.cameo p{flex:1 1 180px;background:var(--ember);border:1px solid var(--line);border-radius:14px 14px 14px 2px;padding:10px 14px;font-size:15px;margin-bottom:40px}
+
+.steps{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:6px}
+.steps li::marker{color:var(--squash);font-family:var(--f-mono)}
+.cats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;list-style:none;margin:0;padding:0}
+.cats li{border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:2px}
+.cats b{font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--squash)}
+.cats span{font-size:14px;color:var(--muted)}
+
+footer{font:400 13px/1.5 var(--f-mono);color:var(--muted);border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.linkish{font:inherit;color:var(--squash);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.linkish:focus-visible{outline:2px solid var(--squash);outline-offset:2px}
+
+@media (max-width:520px){.mains{grid-template-columns:1fr}.btn{width:100%;justify-content:center}.when{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.rise,.ready .rise{animation:none;opacity:1}#leaves{display:none}.curl,.snood{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="leaves" aria-hidden="true"></canvas>
+
+<!-- Intro: a turkey and a pig find the invitation, read the menu, and make a run for it -->
+<div class="stage" id="stage" hidden>
+  <button class="skip" id="skip" type="button">Skip intro</button>
+  <div class="scene" id="scene" aria-hidden="true">
+    <div class="ground"></div>
+    <div class="cast">
+      <div class="who" id="turkey"><div class="bubble"></div><div class="art"></div></div>
+      <div class="who" id="pig"><div class="bubble"></div><div class="art"></div></div>
+    </div>
+    <div class="env" id="env">
+      <div class="env-back"></div>
+      <div class="env-letter">You're<br>invited!</div>
+      <div class="env-front"></div>
+      <div class="env-flap"></div>
+      <div class="seal">V&amp;Z</div>
+    </div>
+    <div class="fx"><span class="puff"></span><span class="puff"></span><span class="puff"></span><span class="puff"></span><span class="feather"></span><span class="feather"></span><span class="feather"></span></div>
+  </div>
+  <div class="tap-hint" aria-hidden="true">Tap anywhere to skip</div>
+</div>
+
+<main class="wrap" id="main">
+  <header class="hero">
+    <div class="eyebrow rise">You're invited · Thanksgiving 2026</div>
+    <h1 class="rise">Dinner at Vinny <span class="amp">&amp;</span> Zack's</h1>
+    <p class="lede rise">Come hungry, bring a dish, and stay as long as the conversation lasts.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Invitation sections">
+    <a href="#when">Date/Time</a>
+    <a href="#where">Where</a>
+    <a href="#rsvp">RSVP</a>
+    <a href="#table">On the Table</a>
+    <a href="#potluck">Potluck Sign-Up</a>
+  </nav>
+
+  <section id="when" aria-labelledby="when-h">
+    <h2 id="when-h"><small>Date / Time</small>Thanksgiving Day</h2>
+    <div class="when">
+      <div class="cal" aria-hidden="true"><span>Nov</span><b>26</b><i>Thursday</i></div>
+      <div class="when-text">
+        <b>3 PM – ?</b>
+        <span>Thursday, November 26, 2026 · Pacific time. Doors open at 3. Stay until whenever.</span>
+      </div>
+    </div>
+    <div class="clock" id="clock" aria-label="Time until dinner">
+      <div><b id="c-d">–</b><span>days</span></div>
+      <div><b id="c-h">–</b><span>hours</span></div>
+      <div><b id="c-m">–</b><span>minutes</span></div>
+    </div>
+    <p class="deadline" id="deadline"></p>
+    <div class="actions">
+      <a class="btn ghost" id="ics" href="#" download="thanksgiving-2026.ics">Add to Apple / Outlook calendar</a>
+      <a class="btn ghost" id="gcal" href="#" target="_blank" rel="noopener">Add to Google Calendar</a>
+    </div>
+  </section>
+
+  <section id="where" aria-labelledby="where-h">
+    <h2 id="where-h"><small>Where</small>Our place</h2>
+    <div class="card where">
+      <b>Vinny &amp; Zack's house</b>
+      <p>Need the address or directions? Ask for them on the RSVP form, and tell us where to send them.</p>
+      <div class="actions">
+        <a class="btn" href="https://forms.cloud.microsoft/r/8h9JAgUPA9" target="_blank" rel="noopener">Get the address</a>
+        <a class="btn ghost" id="addr-mail" href="mailto:home@ahsam-kreiter.net">Or email us</a>
+      </div>
+      <p class="alt">Email not opening? Write to <span class="addr">home@ahsam-kreiter.net</span> <button class="copy" type="button" data-copy="home@ahsam-kreiter.net">Copy address</button></p>
+    </div>
+  </section>
+
+  <section id="rsvp" aria-labelledby="rsvp-h">
+    <h2 id="rsvp-h"><small>RSVP by Friday, Nov 20</small>Are you coming?</h2>
+    <div class="card">
+      <p>Let us know if you're coming: Yes, Maybe or No. It takes under a minute, and there's no sign-in.</p>
+      <div class="actions">
+        <a class="btn" href="https://forms.cloud.microsoft/r/8h9JAgUPA9" target="_blank" rel="noopener">RSVP online</a>
+        <a class="btn ghost" id="rsvp-mail" href="mailto:home@ahsam-kreiter.net">Or email us</a>
+      </div>
+      <p class="hint">Need our address or directions? Ask on the same form.</p>
+      <p class="alt">Email not opening? Write to <span class="addr">home@ahsam-kreiter.net</span> <button class="copy" type="button" data-copy="home@ahsam-kreiter.net">Copy address</button></p>
+    </div>
+  </section>
+
+  <section id="table" aria-labelledby="table-h">
+    <h2 id="table-h"><small>On the table</small>We've got the meats covered</h2>
+    <div class="mains">
+      <div class="main"><b>Roast Turkey</b><span>Provided by Vinny &amp; Zack</span></div>
+      <div class="main"><b>Glazed Ham</b><span>Provided by Vinny &amp; Zack</span></div>
+    </div>
+    <div class="cameo">
+      <div class="mini" id="miniTurkey" aria-hidden="true"></div>
+      <div class="mini" id="miniPig" aria-hidden="true"></div>
+      <p>We hear the <em>sides</em> are amazing this year. Load up on those. Please.</p>
+    </div>
+    <p>Sides and desserts are where you come in. <a class="inline" href="#potluck">Claim a dish</a> so we don't end up with four green bean casseroles and no pie.</p>
+  </section>
+
+  <section id="potluck" aria-labelledby="pot-h">
+    <h2 id="pot-h"><small>Potluck sign-up</small>What are you bringing?</h2>
+    <div class="card">
+      <ol class="steps">
+        <li>Open the sign-up sheet and check what's already claimed.</li>
+        <li>Add a row: your name, whether you're coming, how many, your dish and its category.</li>
+        <li>It saves on its own. No account needed.</li>
+      </ol>
+      <ul class="cats" aria-label="Categories">
+        <li><b>Side</b><span>Stuffing, potatoes, greens</span></li>
+        <li><b>Dessert</b><span>Pies, cakes, cookies</span></li>
+        <li><b>Appetizer</b><span>Something to nibble</span></li>
+        <li><b>Drinks</b><span>Cider, wine, punch</span></li>
+      </ul>
+      <div class="actions">
+        <a class="btn" href="https://ahsamkreiter.sharepoint.com/:x:/s/Home/cQoFuwQU9MtOQ7cE0lkahlQVEgUC6WlmeuRUicxNDouUidnaiA" target="_blank" rel="noopener">Claim a dish</a>
+      </div>
+      <p class="hint">Opens an Excel sheet in your browser.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>Turkey &amp; ham by the hosts · Sides &amp; desserts by you · Thursday, November 26, 2026 · 3 PM until whenever (Pacific)</span>
+    <button class="linkish" id="replay" type="button">Replay the intro</button>
+  </footer>
+</main>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- The cast (each drawn once, used in the intro and the cameo) ---------- */
+  const eyes=(lx,rx,y,r)=>`<g class="eye"><circle cx="${lx}" cy="${y}" r="${r}" fill="#fff"/><circle class="pupil" cx="${lx+1}" cy="${y+1}" r="${r*.47}" fill="#1c1416"/></g><g class="eye"><circle cx="${rx}" cy="${y}" r="${r}" fill="#fff"/><circle class="pupil" cx="${rx+1}" cy="${y+1}" r="${r*.47}" fill="#1c1416"/></g>`;
+  const fx=(sx,sy)=>`<path class="sweat" d="M${sx} ${sy} q7 10 0 15 q-7 -5 0 -15 Z" fill="#8fc3e8"/><g class="shock" fill="#f3e3c7"><rect x="58" y="40" width="4" height="13" rx="2" transform="rotate(-25 60 46)"/><rect x="140" y="40" width="4" height="13" rx="2" transform="rotate(25 142 46)"/></g>`;
+
+  function turkeySVG(){
+    const angles=[-63,-42,-21,0,21,42,63], cols=['#c8434f','#e8963a','#d9a441','#b8642c','#d9a441','#e8963a','#c8434f'];
+    const tail=angles.map((a,i)=>`<g transform="rotate(${a} 100 140)"><ellipse cx="100" cy="66" rx="21" ry="58" fill="${cols[i]}"/><ellipse cx="100" cy="74" rx="8" ry="40" fill="rgba(255,255,255,.13)"/></g>`).join('');
+    const leg=(x,c)=>`<g class="leg ${c}"><path d="M${x} 186 L${x} 214" stroke="#e8963a" stroke-width="5" stroke-linecap="round"/><path d="M${x} 214 l-10 5 M${x} 214 l0 7 M${x} 214 l10 5" stroke="#e8963a" stroke-width="4" stroke-linecap="round" fill="none"/></g>`;
+    return `<svg viewBox="0 0 200 232" aria-hidden="true"><g class="body">
+      <g class="tail">${tail}</g>
+      ${leg(86,'leg-l')}${leg(114,'leg-r')}
+      <ellipse cx="100" cy="146" rx="55" ry="50" fill="#7a4a2b"/>
+      <ellipse cx="100" cy="158" rx="34" ry="33" fill="#9a6439"/>
+      <ellipse cx="52" cy="148" rx="14" ry="27" fill="#643a21" transform="rotate(22 52 148)"/>
+      <ellipse cx="148" cy="148" rx="14" ry="27" fill="#643a21" transform="rotate(-22 148 148)"/>
+      <g class="hd">
+        <ellipse cx="100" cy="106" rx="17" ry="22" fill="#8b5a36"/>
+        <circle cx="100" cy="84" r="25" fill="#8b5a36"/>
+        <circle cx="84" cy="92" r="5" fill="#c8434f" opacity=".35"/><circle cx="116" cy="92" r="5" fill="#c8434f" opacity=".35"/>
+        ${eyes(90,110,78,9)}
+        <path d="M93 88 L107 88 L100 100 Z" fill="#e8963a"/>
+        <path class="snood" d="M104 92 q11 7 5 22 q-3 6 -7 0 q-4 -9 2 -22 Z" fill="#c8434f"/>
+        ${fx(129,62)}
+        <g class="hat"><rect x="83" y="40" width="34" height="24" rx="2" fill="#151012"/><rect x="83" y="56" width="34" height="5" fill="#4a3534"/><rect x="95" y="54.5" width="10" height="8" rx="1" fill="none" stroke="#d9a441" stroke-width="2"/><rect x="74" y="62" width="52" height="6" rx="3" fill="#151012"/></g>
+      </g>
+    </g></svg>`;
+  }
+
+  function pigSVG(){
+    const leg=(x,c)=>`<g class="leg ${c}"><rect x="${x-8}" y="182" width="16" height="30" rx="7" fill="#e58f9e"/><rect x="${x-8}" y="206" width="16" height="9" rx="3" fill="#5a3a3f"/></g>`;
+    return `<svg viewBox="0 0 200 232" aria-hidden="true"><g class="body">
+      <path class="curl" d="M154 150 c14 -4 18 8 10 12 c-8 4 -10 -8 0 -10 c8 -1 12 6 8 12" stroke="#e58f9e" stroke-width="5" fill="none" stroke-linecap="round"/>
+      ${leg(80,'leg-l')}${leg(120,'leg-r')}
+      <ellipse cx="100" cy="150" rx="58" ry="48" fill="#f0a3b0"/>
+      <ellipse cx="100" cy="162" rx="36" ry="30" fill="#f6bcc6"/>
+      <g class="hd">
+        <path class="ear ear-l" d="M66 70 L58 34 L90 56 Z" fill="#e58f9e"/>
+        <path class="ear ear-r" d="M134 70 L142 34 L110 56 Z" fill="#e58f9e"/>
+        <circle cx="100" cy="88" r="40" fill="#f4adb9"/>
+        <circle cx="74" cy="100" r="7" fill="#c8434f" opacity=".25"/><circle cx="126" cy="100" r="7" fill="#c8434f" opacity=".25"/>
+        ${eyes(86,114,78,8)}
+        <ellipse cx="100" cy="102" rx="17" ry="12" fill="#e58f9e"/>
+        <ellipse cx="94" cy="102" rx="3.2" ry="4.5" fill="#9c4a59"/><ellipse cx="106" cy="102" rx="3.2" ry="4.5" fill="#9c4a59"/>
+        <path class="smile" d="M90 118 q10 7 20 0" stroke="#9c4a59" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <ellipse class="grin" cx="100" cy="121" rx="7" ry="6" fill="#5a3a3f"/>
+        ${fx(138,58)}
+      </g>
+      <g><path d="M100 132 L82 122 L82 142 Z M100 132 L118 122 L118 142 Z" fill="#c8434f"/><circle cx="100" cy="132" r="4.5" fill="#a8323e"/></g>
+    </g></svg>`;
+  }
+  $('turkey').querySelector('.art').innerHTML=turkeySVG();
+  $('pig').querySelector('.art').innerHTML=pigSVG();
+  $('miniTurkey').innerHTML=turkeySVG();
+  $('miniPig').innerHTML=pigSVG();
+
+  /* cameo eyes follow your finger or cursor */
+  const minis=[$('miniTurkey'),$('miniPig')];
+  addEventListener('pointermove',e=>{
+    minis.forEach(m=>{
+      const r=m.getBoundingClientRect(); if(!r.width)return;
+      const dx=e.clientX-(r.left+r.width/2), dy=e.clientY-(r.top+r.height*.34), d=Math.hypot(dx,dy)||1, k=Math.min(3.5,d/40);
+      m.querySelectorAll('.pupil').forEach(p=>p.style.transform=`translate(${dx/d*k}px,${dy/d*k}px)`);
+    });
+  },{passive:true});
+
+  /* ---------- Intro timeline ---------- */
+  const stage=$('stage'), scene=$('scene'), main=$('main');
+  const T=$('turkey'), P=$('pig');
+  let timers=[], running=false;
+  function say(who,html){const b=who.querySelector('.bubble');b.classList.remove('show');b.innerHTML=html;void b.offsetWidth;b.classList.add('show')}
+  function hush(...who){(who.length?who:[T,P]).forEach(w=>w.querySelector('.bubble').classList.remove('show'))}
+  function at(ms,fn){timers.push(setTimeout(fn,ms))}
+
+  function playIntro(){
+    timers.forEach(clearTimeout);timers=[];running=true;
+    document.body.classList.remove('ready');main.inert=true;
+    stage.hidden=false;stage.classList.remove('gone');
+    scene.className='scene';T.className='who';P.className='who';hush();
+    void scene.offsetWidth;
+    scrollTo(0,0);
+    $('skip').focus({preventScroll:true});
+    at(80,   ()=>{T.classList.add('in','walking');P.classList.add('in','walking')});
+    at(2100, ()=>{T.classList.remove('walking');P.classList.remove('walking');T.classList.add('blink');P.classList.add('blink');say(T,'Ooh! Mail!')});
+    at(3200, ()=>{hush(T);say(P,'A party invite!')});
+    at(4300, ()=>{hush(P);T.classList.add('read');P.classList.add('read');say(T,'“Thanksgiving at Vinny &amp; Zack’s…”')});
+    at(5700, ()=>{hush(T);say(P,'“On the menu: Roast…”')});
+    at(6900, ()=>{hush(P);T.classList.add('panic');say(T,'…<em>TURKEY?!</em>')});
+    at(8100, ()=>{hush(T);T.classList.remove('read');P.classList.remove('read');P.classList.add('smug');say(P,'Ha! Sucks to be y—')});
+    at(9300, ()=>{say(T,'“…and Glazed <em>HAM</em>.”');P.classList.remove('smug');P.classList.add('panic');hush(P)});
+    at(10600,()=>{say(T,'<em>RUN!</em>');say(P,'<em>RUN!!</em>')});
+    at(11500,()=>{hush();T.classList.remove('panic');P.classList.remove('panic');T.classList.add('run');P.classList.add('run');scene.classList.add('running')});
+    at(12400,()=>scene.classList.add('open'));
+    at(13800,finish);
+  }
+  function finish(){
+    if(!running)return; running=false;
+    timers.forEach(clearTimeout);timers=[];
+    stage.classList.add('gone');
+    document.body.classList.add('ready');main.inert=false;
+    setTimeout(()=>{if(!running)stage.hidden=true},700);
+  }
+  $('skip').addEventListener('click',e=>{e.stopPropagation();finish()});
+  stage.addEventListener('click',finish);
+  addEventListener('keydown',e=>{if(running&&e.key==='Escape')finish()});
+  $('replay').addEventListener('click',playIntro);
+
+  if(reduce){document.body.classList.add('ready')} else {playIntro()}
+
+  /* ---------- Section menu: highlight where you are ---------- */
+  const links=[...document.querySelectorAll('.tabs a')];
+  const byId=Object.fromEntries(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const io=new IntersectionObserver(es=>{
+    es.forEach(en=>{if(en.isIntersecting){links.forEach(a=>a.removeAttribute('aria-current'));const a=byId[en.target.id];if(a){a.setAttribute('aria-current','true');const nav=a.parentElement;nav.scrollTo({left:a.offsetLeft-nav.clientWidth/2+a.offsetWidth/2,behavior:'smooth'})}}});
+  },{rootMargin:'-40% 0px -55% 0px'});
+  Object.keys(byId).forEach(id=>io.observe($(id)));
+
+  /* ---------- Email links ---------- */
+  const mail=(s,b)=>'mailto:home@ahsam-kreiter.net?subject='+encodeURIComponent(s)+'&body='+encodeURIComponent(b);
+  $('rsvp-mail').href=mail("RSVP: Thanksgiving at Vinny & Zack's",'Hi Vinny & Zack,\n\nName / family: \nComing? (Yes / Maybe / No): \nHow many: \nNotes (allergies, arriving late): \n');
+  $('addr-mail').href=mail('Directions for Thanksgiving','Hi Vinny & Zack,\n\nCould you send me the address and directions for Thanksgiving?\n\nThanks!\n');
+
+  /* ---------- Add to calendar (3–9 PM Pacific = 23:00–05:00 UTC) ---------- */
+  const evTitle="Thanksgiving Dinner at Vinny & Zack's", evWhere="Vinny & Zack's house",
+        evNotes='Doors open at 3 PM. Stay until whenever. Bring a side or dessert: https://tinyurl.com/TG2026-potluck';
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Vinny & Zack//Thanksgiving 2026//EN','BEGIN:VEVENT',
+    'UID:thanksgiving-2026@ahsam-kreiter.net','DTSTAMP:20261102T000000Z','DTSTART:20261126T230000Z','DTEND:20261127T050000Z',
+    'SUMMARY:'+evTitle,'LOCATION:'+evWhere,'DESCRIPTION:'+evNotes,'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  $('ics').href='data:text/calendar;charset=utf-8,'+encodeURIComponent(ics);
+  $('gcal').href='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(evTitle)
+    +'&dates=20261126T230000Z/20261127T050000Z&location='+encodeURIComponent(evWhere)+'&details='+encodeURIComponent(evNotes);
+
+  /* fallback when no mail app is set up: copy the address */
+  document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',async()=>{
+    const t=b.dataset.copy;let ok=false;
+    try{await navigator.clipboard.writeText(t);ok=true}catch(e){
+      try{const r=document.createRange();r.selectNodeContents(b.previousElementSibling);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);ok=document.execCommand('copy')}catch(e2){}
+    }
+    b.textContent=ok?'Copied!':'Press and hold to copy';setTimeout(()=>b.textContent='Copy address',2200);
+  }));
+
+  /* ---------- Countdown (fixed to Pacific time, whatever the viewer's zone) ---------- */
+  const dinner=new Date('2026-11-26T15:00:00-08:00'), rsvpBy=new Date('2026-11-20T23:59:59-08:00');
+  function tick(){
+    const now=new Date(), ms=dinner-now;
+    if(ms<=0){$('clock').hidden=true;$('deadline').textContent='Happy Thanksgiving!';return}
+    const m=Math.floor(ms/6e4);
+    $('c-d').textContent=Math.floor(m/1440);$('c-h').textContent=Math.floor(m%1440/60);$('c-m').textContent=m%60;
+    const r=Math.ceil((rsvpBy-now)/864e5);
+    $('deadline').innerHTML=r>0
+      ?`<strong>${r} day${r===1?'':'s'}</strong> left to RSVP (by Friday, Nov 20)`
+      :'RSVPs closed Nov 20, but late replies are still welcome.';
+  }
+  tick(); setInterval(tick,3e4);
+
+  /* ---------- Falling leaves ---------- */
+  const cv=$('leaves'), cx=cv.getContext('2d');
+  const colors=['#e8963a','#c8434f','#b8642c','#d9a441','#8f3a2f'];
+  let W,H,leaves=[];
+  function size(){const dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0)}
+  function mk(y){return{x:Math.random()*W,y:y??-20-Math.random()*H,s:6+Math.random()*10,vy:.35+Math.random()*.7,sw:Math.random()*6.28,sp:.01+Math.random()*.02,r:Math.random()*6.28,vr:(Math.random()-.5)*.03,c:colors[(Math.random()*colors.length)|0],a:.35+Math.random()*.4}}
+  function leaf(l){
+    cx.save();cx.translate(l.x,l.y);cx.rotate(l.r);cx.globalAlpha=l.a;cx.fillStyle=l.c;
+    cx.beginPath();cx.moveTo(0,-l.s);cx.quadraticCurveTo(l.s*.9,-l.s*.2,0,l.s);cx.quadraticCurveTo(-l.s*.9,-l.s*.2,0,-l.s);cx.fill();
+    cx.strokeStyle='rgba(28,20,22,.5)';cx.lineWidth=1;cx.beginPath();cx.moveTo(0,-l.s);cx.lineTo(0,l.s*1.25);cx.stroke();
+    cx.restore();
+  }
+  function frame(){
+    cx.clearRect(0,0,W,H);
+    for(const l of leaves){l.sw+=l.sp;l.x+=Math.sin(l.sw)*.8;l.y+=l.vy;l.r+=l.vr;if(l.y>H+20)Object.assign(l,mk(-20));leaf(l)}
+    requestAnimationFrame(frame);
+  }
+  if(!reduce){size();addEventListener('resize',size);const n=Math.min(38,Math.round(W/28));for(let i=0;i<n;i++)leaves.push(mk(Math.random()*H));frame()}
+})();
+</script>
+</body>
+</html>
